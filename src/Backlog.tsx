@@ -1,56 +1,61 @@
 import * as React from 'react';
-import {useEffect, useState} from 'react';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableCell from '@mui/material/TableCell';
-import TableContainer from '@mui/material/TableContainer';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import Paper from '@mui/material/Paper';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import Divider from '@mui/material/Divider';
+import ListItemText from '@mui/material/ListItemText';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import Avatar from '@mui/material/Avatar';
+import Typography from '@mui/material/Typography';
+import {useEffect, useState} from "react";
 import getBacklogList from "./BacklogApi";
 
-export default function Backlog() {
-    const [result, setResult] = useState([]);
+export default function AlignItemsList() {
 
+    const [result,setResult]=useState([])
 
     useEffect(() => {
         getBacklogList()
-            .then((response) => setResult(response.data))
-            .catch((err) => {
-                console.error("ops! ocorreu um erro" + err);
+            .then((res) => {
+                setResult(res.data);
+            })
+            .catch((error) => {
+                console.log(error);
             });
     }, []);
 
     return (
+        <>
+            <List sx={{width: '100%', maxWidth: 360, bgcolor: 'background.paper'}} >
+            {result.map((row, i)=>{
+                return <ListItem alignItems="flex-start">
+                    <ListItemAvatar>
+                        <Avatar alt={(i+1).toString()} src="/static/images/avatar/1.jpg"/>
+                    </ListItemAvatar>
+                    <ListItemText
+                        primary={row['name']}
+                        secondary={
+                            <React.Fragment>
+                                <Typography
+                                    sx={{display: 'inline'}}
+                                    component="span"
+                                    variant="body2"
+                                    color="text.primary"
+                                >
+                                    {row['platform']}
+                                </Typography>
 
-        <div className="BacklogList">
+                            </React.Fragment>
+                        }
+                    />
+                </ListItem>
 
-        <TableContainer component={Paper}>
-            <Table sx={{minWidth: 650}} size="small" aria-label="a dense table">
-                <TableHead>
-                    <TableRow>
-                        <TableCell>Jogo</TableCell>
-                        <TableCell align="right">Plataforma</TableCell>
-                        <TableCell align="right">Status</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {result.map((row) => (
-                        <TableRow
-                            key={row["name"]}
-                            sx={{'&:last-child td, &:last-child th': {border: 0}}}
-                        >
-                            <TableCell component="th" scope="row">
-                                {row["name"]}
-                            </TableCell>
-                            <TableCell align="right">{row["platform"]}</TableCell>
-                            <TableCell align="right">{row["status"]}</TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
+            })}
+            </List>
 
-        </div>
+        </>
+
+
+
+
     );
 }
