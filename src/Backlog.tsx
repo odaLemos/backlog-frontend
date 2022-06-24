@@ -29,7 +29,7 @@ export default function AlignItemsList() {
             {result.map((row, i)=>{
                 return <ListItem alignItems="flex-start">
                     <ListItemAvatar>
-                        <Avatar alt={(i+1).toString()} src="/static/images/avatar/1.jpg"/>
+                        <Avatar alt={row['name']} src={row['additional_info']['cover_url']}/>
                     </ListItemAvatar>
                     <ListItemText
                         primary={row['name']}
@@ -41,7 +41,7 @@ export default function AlignItemsList() {
                                     variant="body2"
                                     color="text.primary"
                                 >
-                                    {row['platform']}
+                                    {row['platform']['name']}
                                 </Typography>
 
                             </React.Fragment>
