@@ -9,7 +9,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import getBacklogList from "./BacklogApi";
 
-export default function BacklogList() {
+export default function Backlog() {
     const [result, setResult] = useState([]);
 
 
