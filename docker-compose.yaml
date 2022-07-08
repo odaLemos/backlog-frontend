@@ -1,13 +1,33 @@
-version: '3'
-
+version: '3.7'
 services:
+    backend:
+        container_name: backlog-api
+        build:
+            context: ./backlog-api
 
-  frontend:
-    build: .
-    container_name: frontend
-    volumes:
-      - ./:/app
-      - /app/node_modules
-    tty: true
-    ports:
-      - "3000:3000"
+        volumes:
+            - './backlog-api:/app'
+        ports:
+            - '5000:5000'
+        networks:
+            - backlog-network
+
+    frontend:
+        container_name: backlog-frontend
+        build:
+            context: ./backlog-frontend
+        volumes:
+            - './backlog-frontend:/app'
+            - '/app/node_modules'
+        ports:
+            - '3000:3000'
+        environment:
+            - NODE_ENV=development
+        networks:
+            - backlog-network
+        depends_on:
+            -   backend
+
+networks:
+    backlog-network:
+        driver: bridge
